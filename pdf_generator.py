@@ -8,7 +8,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
 pdfmetrics.registerFont(
-    TTFont("NanumGothic", "/home/srooll/lecture-llm/fonts/NanumGothic.ttf")
+    TTFont("NanumGothic", "")
 )
 BASE_FONT_NAME = "NanumGothic"
 
