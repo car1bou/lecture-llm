@@ -1,8 +1,8 @@
 import os
 import subprocess
 
-WHISPER_BIN = "/home/srooll/whisper.cpp/build/bin/whisper-cli"
-WHISPER_MODEL_PATH = "/home/srooll/whisper.cpp/models/ggml-large-v3.bin"
+WHISPER_BIN = ""
+WHISPER_MODEL_PATH = ""
 
 
 def run_whisper_cpp_to_srt(audio_path: str, srt_path: str) -> str:
