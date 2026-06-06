@@ -1,14 +1,6 @@
-# whisper_cpp.py
-#
-# - whisper.cpp의 whisper-cli 바이너리를 호출해서 SRT 생성
-# - 모델은 ggml-large-v3.bin 으로 고정
-# - run_whisper_cpp_to_srt: audio.wav -> lecture.srt
-# - srt_to_text: SRT 파일 -> 순수 텍스트
-
 import os
 import subprocess
 
-# whisper.cpp 실행 파일과 모델 경로 (환경에 맞게 고정)
 WHISPER_BIN = "/home/srooll/whisper.cpp/build/bin/whisper-cli"
 WHISPER_MODEL_PATH = "/home/srooll/whisper.cpp/models/ggml-large-v3.bin"
 
@@ -25,10 +17,8 @@ def run_whisper_cpp_to_srt(audio_path: str, srt_path: str) -> str:
     audio_path = os.path.abspath(audio_path)
     srt_path = os.path.abspath(srt_path)
 
-    # output_prefix는 .srt 확장자를 제거한 부분
     output_prefix, _ = os.path.splitext(srt_path)
 
-    # 실행 파일/모델/오디오 존재 여부 체크
     if not os.path.exists(WHISPER_BIN):
         raise FileNotFoundError(
             f"whisper.cpp 실행 파일을 찾을 수 없습니다: {WHISPER_BIN}"
@@ -42,7 +32,6 @@ def run_whisper_cpp_to_srt(audio_path: str, srt_path: str) -> str:
             f"오디오 파일을 찾을 수 없습니다: {audio_path}"
         )
 
-    # whisper-cli 실행 명령
     cmd = [
         WHISPER_BIN,
         "-m",
@@ -50,15 +39,14 @@ def run_whisper_cpp_to_srt(audio_path: str, srt_path: str) -> str:
         "-f",
         audio_path,
         "-l",
-        "ko",          # 한국어 고정
+        "ko",       
         "-t",
-        "4",           # 스레드 4개 (N150 4코어 기준)
-        "-osrt",       # SRT 포맷 출력
+        "4",          
+        "-osrt",     
         "-of",
         output_prefix,
     ]
 
-    # stdout/stderr를 캡처하지 않고 바로 터미널로 보내서 진행 상황이 보이게 함
     proc = subprocess.Popen(cmd)
     ret = proc.wait()
 
@@ -68,7 +56,6 @@ def run_whisper_cpp_to_srt(audio_path: str, srt_path: str) -> str:
             f"CMD: {' '.join(cmd)}\n"
         )
 
-    # whisper-cli는 prefix + ".srt" 로 저장하므로 그 경로를 확인
     generated_srt = output_prefix + ".srt"
     if not os.path.exists(generated_srt):
         raise FileNotFoundError(
@@ -95,10 +82,8 @@ def srt_to_text(srt_path: str) -> str:
             stripped = line.strip()
             if not stripped:
                 continue
-            # 숫자 인덱스 줄 (1, 2, 3, ...)
             if stripped.isdigit():
                 continue
-            # 타임스탬프 줄 (00:00:00,000 --> 00:00:02,000)
             if "-->" in stripped:
                 continue
             lines.append(stripped)
