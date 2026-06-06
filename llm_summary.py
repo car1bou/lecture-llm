@@ -1,6 +1,6 @@
 import json
 import requests
-OLLAMA_URL = "http://localhost:11434/api/chat"
+OLLAMA_URL = ""
 MODEL_NAME = "exaone3.5:7.8b"
 PROMPT_HEADER = """
 당신은 한국어 강의 내용을 요약하는 전문 도우미입니다.
